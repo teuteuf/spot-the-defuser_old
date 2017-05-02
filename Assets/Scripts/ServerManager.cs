@@ -20,15 +20,18 @@ public class ServerManager : NetworkBehaviour {
 	public void CmdRegisterPlayer(GameObject playerGameObject)
 	{
 		players.Add(playerGameObject.GetComponent<PlayerManager>());
-		Debug.LogError("Nb players registred: " + players.Count);
+		Debug.Log("Nb players registred: " + players.Count);
 	}
 
 	[Command]
-	public void CmdLogAllPlayers()
+	public void CmdResetAllBombsAndDefusers()
 	{
-		for(int i = 0; i < players.Count; i++)
+		float randomValue = Random.value;
+		int defuserIndex = Random.Range(0, players.Count);
+
+		for (int i = 0; i < players.Count; i++)
 		{
-			players[i].RpcLogPlayer(i);
+			players[i].RpcSetBombOrDefuser(randomValue, i == defuserIndex);
 		}
 	}
 }

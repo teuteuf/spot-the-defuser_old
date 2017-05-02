@@ -21,13 +21,15 @@ public class PlayerManager : NetworkBehaviour {
 	[Command]
 	public void CmdTryDefuse()
 	{
-		ServerManager.instance.CmdLogAllPlayers();
+		ServerManager.instance.CmdResetAllBombsAndDefusers();
 	}
 
 	[ClientRpc]
-	public void RpcLogPlayer(int index)
+	public void RpcSetBombOrDefuser(float random, bool isDefuser)
 	{
 		if (isLocalPlayer)
-			Debug.LogError("Player: " + index);
+		{
+			LocalManager.instance.SetBombOrDefuser(random, isDefuser);
+		}
 	}
 }
