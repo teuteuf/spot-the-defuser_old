@@ -5,23 +5,34 @@ using UnityEngine.Networking;
 
 public class PlayerManager : NetworkBehaviour {
 
-	void Start()
-	{
-		if (isServer)
-		{
-			ServerManager.instance.CmdRegisterPlayer(gameObject);
-		}
+	private ServerManager serverManager;
+	private LocalManager  localManager;
 
-		if (isLocalPlayer)
+	public override void OnStartLocalPlayer()
+	{
+		localManager = LocalManager.instance;
+		localManager.SetLocalPlayer(this);
+	}
+
+	public override void OnStartServer()
+	{
+		serverManager = ServerManager.instance;
+		serverManager.RegisterPlayer(gameObject);
+	}
+	
+
+	private void OnDestroy()
+	{
+		if (serverManager != null)
 		{
-			LocalManager.instance.SetLocalPlayer(this);
+			serverManager.UnregisterPlayer(gameObject);
 		}
 	}
 
 	[Command]
 	public void CmdTryDefuse()
 	{
-		ServerManager.instance.CmdResetAllBombsAndDefusers();
+		serverManager.ResetAllBombsAndDefusers();
 	}
 
 	[ClientRpc]
@@ -29,7 +40,7 @@ public class PlayerManager : NetworkBehaviour {
 	{
 		if (isLocalPlayer)
 		{
-			LocalManager.instance.SetBombOrDefuser(random, isDefuser);
+			localManager.SetBombOrDefuser(random, isDefuser);
 		}
 	}
 }

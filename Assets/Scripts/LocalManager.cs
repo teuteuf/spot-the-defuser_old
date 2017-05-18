@@ -15,10 +15,8 @@ public class LocalManager : MonoBehaviour {
 
 	private void Awake()
 	{
-		if (instance == null)
-		{
-			instance = this;
-		}
+		Debug.Assert(instance == null, "Tried to init LocalManager instance twice!");
+		instance = this;
 
 		Debug.Assert(listDefusers.Count == listBombs.Count, "Not same count of bombs and defusers!");
 	}
