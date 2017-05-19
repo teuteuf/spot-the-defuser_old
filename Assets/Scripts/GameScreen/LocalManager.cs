@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class LocalManager : MonoBehaviour {
 	public static LocalManager instance;
 
+	public UIManager uiManager;
+
 	public Image uiSprite;
 
 	public List<Sprite> listDefusers;

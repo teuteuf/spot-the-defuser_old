@@ -25,7 +25,7 @@ public class PlayerManager : NetworkBehaviour {
 	{
 		if (serverManager != null)
 		{
-			serverManager.UnregisterPlayer(gameObject);
+			serverManager.OnPlayerDestroy(gameObject);
 		}
 	}
 
@@ -41,6 +41,23 @@ public class PlayerManager : NetworkBehaviour {
 		if (isLocalPlayer)
 		{
 			localManager.SetBombOrDefuser(random, isDefuser);
+		}
+	}
+
+	[ClientRpc]
+	public void RpcOnErrorOccured()
+	{
+		if (isLocalPlayer)
+		{
+			//localManager.uiManager.GoToErrorScreen();
+			if(serverManager != null)
+			{
+				NetworkManager.singleton.StopHost();
+			}
+			else
+			{
+				NetworkManager.singleton.StopClient();
+			}
 		}
 	}
 }

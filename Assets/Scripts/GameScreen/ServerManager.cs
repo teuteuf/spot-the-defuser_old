@@ -21,10 +21,15 @@ public class ServerManager : NetworkBehaviour {
 		Debug.Log("Player registered! Nb players registered: " + players.Count);
 	}
 
-	public void UnregisterPlayer(GameObject playerGameObject)
+	public void OnPlayerDestroy(GameObject playerGameObject)
 	{
 		players.Remove(playerGameObject.GetComponent<PlayerManager>());
 		Debug.Log("Player unregistered! Nb players registered: " + players.Count);
+
+		foreach(PlayerManager player in players)
+		{
+			player.RpcOnErrorOccured();
+		}
 	}
 
 	public void ResetAllBombsAndDefusers()
